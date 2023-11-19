@@ -1,0 +1,126 @@
+import { Popover, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
+import classNames from 'classnames'
+import { useState, useEffect } from 'react'
+
+function ModifEleve() {
+    return (
+        <Popover className="">
+            {({ open }) => (
+                <>
+                    <div
+                        className={classNames(
+                            open && '!visible',
+                            ' invisible absolute top-0 left-0 bg-bdcolor backdrop-opacity-90 backdrop-blur-sm w-full h-full z-9 overflow-hidden'
+                        )}
+                    ></div>
+
+                    <Popover.Button
+                        className={classNames(open && '', 'hover:transform hover:scale-[1.1]   rounded-full ')}
+                    >
+                        <span className="material-icons text-green px-2 cursor-pointer">edit</span>
+                    </Popover.Button>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-500"
+                        enterFrom="opacity-0 translate-y-1"
+                        enterTo="opacity-100 translate-y-0"
+                        leave="transition ease-in duration-200"
+                        leaveFrom="opacity-100 translate-y-0"
+                        leaveTo="opacity-0 translate-y-1"
+                    >
+                        <Popover.Panel className="absolute bg-red flex left-0 top-0 justify-center items-center z-10   w-screen h-screen  px-4 ">
+                            <Formulaire />
+                        </Popover.Panel>
+                    </Transition>
+                </>
+            )}
+        </Popover>
+    )
+}
+
+export default ModifEleve
+
+function Formulaire({ addAccount }) {
+    const inputStyle = 'h-8 bg-light-blue rounded-md  w-full outline-blue px-2 py-1 text-grey'
+    const labelStyle = 'font-bold py-1 text-grey flex '
+    const [status, setStatus] = useState('')
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [tel, setTel] = useState('')
+    const [password, setPassword] = useState('0000')
+    const date = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`
+    const [account, setAccount] = useState({})
+
+    useEffect(() => {
+        setAccount({ id: new Date().getMilliseconds(), status, name, email, tel, password, date })
+    }, [status, name, email, tel, password, date])
+
+    return (
+        <div className=" bg-white  shadow-md rounded-md w-[450px] py-1  ">
+            <div className="p-2 bg-white flex  flex-row justify-center border-light-blue border-b-2  items-center shadow-sm  ">
+                <span className="text-2xl font-bold text-[#0c0c75]">Nouveau compte</span>
+            </div>
+            <div className=" flex flex-col gap-[10px] px-5 py-3">
+                <div className="flex flex-col ">
+                    <label htmlFor="" className={labelStyle}>
+                        Statut <span className="text-blue">*</span>
+                    </label>
+                    <select
+                        name=""
+                        id=""
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        className={inputStyle}
+                    >
+                        <option value="" disabled selected></option>
+                        <option value="admin">Admin</option>
+                        <option value="Comptable">Comptable</option>
+                        <option value="super-admin">Super Admin</option>
+                    </select>
+                </div>
+                <div className="flex flex-col ">
+                    <label htmlFor="" className={labelStyle}>
+                        Nom <span className="text-blue">*</span>
+                    </label>
+                    <input type="text" className={inputStyle} value={name} onChange={(e) => setName(e.target.value)} />
+                </div>
+                <div className="flex flex-col ">
+                    <label htmlFor="" className={labelStyle}>
+                        E-mail <span className="text-blue">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        className={inputStyle}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <div className="flex flex-col ">
+                    <label htmlFor="" className={labelStyle}>
+                        Tel <span className="text-blue">*</span>
+                    </label>
+                    <input type="text" className={inputStyle} value={tel} onChange={(e) => setTel(e.target.value)} />
+                </div>
+                <div className="flex flex-col ">
+                    <label htmlFor="" className={labelStyle}>
+                        Mot de passe <span className="text-blue">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        className={inputStyle}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        disabled
+                    />
+                </div>
+                <div
+                    onClick={() => addAccount(account)}
+                    className="mt-2 flex justify-center py-2 rounded-md cursor-pointer text-md font-bold bg-[#0c0c75] hover:bg-[#181894] text-white"
+                >
+                    Valider
+                </div>
+            </div>
+        </div>
+    )
+}
