@@ -1,8 +1,9 @@
 //import { studentList } from '../data/studentList'
 import Loader from '../utils/Loader'
+import StudentLoader from '../components/Loaders/StudentLoader'
 
 import ListElement from '../components/ListElement'
-import default_photo from '../assets/profile.png'
+
 import { Link } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -31,7 +32,7 @@ function GestionEleves() {
 
     return (
         <div className="flex flex-col items-center justify-center w-full h-full ">
-            <div className=" mt-1 pt-2 shadow-md flex h-[300px] max-h-[500px] w-[1000px] overflow-scroll">
+            <div className=" mt-1 pt-2 shadow-md flex  max-h-[500px] w-[1000px] overflow-scroll">
                 <table>
                     <thead>
                         <tr className="bg-blue text-white  px-2 text-left rounded-md">
@@ -55,31 +56,20 @@ function GestionEleves() {
                     </thead>
                     <tbody>
                         {!students ? (
-                            <div className="absolute w-[1000px] h-[200px] flex items-center justify-center">
-                                <Loader />
-                            </div>
+                            // {<div className="absolute w-[1000px] h-[200px] flex items-center justify-center">
+                            //     <Loader />
+                            // </div>}
+                            <>
+                                <StudentLoader />
+                                <StudentLoader />
+                                <StudentLoader />
+                                <StudentLoader />
+                                <StudentLoader />
+                                <StudentLoader />
+                            </>
                         ) : (
                             students.map((stud) => (
-                                <ListElement
-                                    key={stud._id}
-                                    handleDelete={handleDelete}
-                                    id={stud._id}
-                                    name={stud.firstName}
-                                    surname={stud.lastName}
-                                    sexe={stud.sex}
-                                    start={stud.dateBegin}
-                                    end={stud.dateEnd}
-                                    rest={stud.rest}
-                                    training={stud.training}
-                                    birthday={stud.dateOfBirth}
-                                    level={stud.schoolLevel}
-                                    tel1={stud.tel1}
-                                    amount={stud.amount}
-                                    advance={stud.advance}
-                                    quater={stud.quater}
-                                    email={stud.email}
-                                    photo={stud.photo ? stud.photo : default_photo}
-                                />
+                                <ListElement key={stud._id} handleDelete={handleDelete} student={stud} />
                             ))
                         )}
                     </tbody>

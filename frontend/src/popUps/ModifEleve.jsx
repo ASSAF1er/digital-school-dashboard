@@ -1,125 +1,284 @@
-import { Popover, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
-import classNames from 'classnames'
-import { useState, useEffect } from 'react'
+import * as React from 'react'
+import Dialog from '@mui/material/Dialog'
 
-function ModifEleve() {
+import { useEffect, useState } from 'react'
+
+export default function ModifEleve({ handleDelete, student }) {
+    const [openBox, setOpenBox] = React.useState(false)
+
+    const handleClickOpen = () => {
+        setOpenBox(true)
+    }
+    const handleUpdate = () => {
+        setOpenBox(false)
+    }
+
+    const handleClose = () => {
+        setOpenBox(false)
+    }
+
     return (
-        <Popover className="">
-            {({ open }) => (
-                <>
-                    <div
-                        className={classNames(
-                            open && '!visible',
-                            ' invisible absolute top-0 left-0 bg-bdcolor backdrop-opacity-90 backdrop-blur-sm w-full h-full z-9 overflow-hidden'
-                        )}
-                    ></div>
+        <div>
+            <span className="material-icons text-green px-2 cursor-pointer" onClick={handleClickOpen}>
+                edit
+            </span>
 
-                    <Popover.Button
-                        className={classNames(open && '', 'hover:transform hover:scale-[1.1]   rounded-full ')}
-                    >
-                        <span className="material-icons text-green px-2 cursor-pointer">edit</span>
-                    </Popover.Button>
-                    <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-500"
-                        enterFrom="opacity-0 translate-y-1"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in duration-200"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 translate-y-1"
-                    >
-                        <Popover.Panel className="absolute bg-red flex left-0 top-0 justify-center items-center z-10   w-screen h-screen  px-4 ">
-                            <Formulaire />
-                        </Popover.Panel>
-                    </Transition>
-                </>
-            )}
-        </Popover>
+            <Dialog
+                open={openBox}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth="xl"
+            >
+                <Formulaire student={student} handleUpdate={handleUpdate} handleClose={handleClose} />
+            </Dialog>
+        </div>
     )
 }
 
-export default ModifEleve
-
-function Formulaire({ addAccount }) {
+function Formulaire({ handleUpdate, student, handleClose }) {
     const inputStyle = 'h-8 bg-light-blue rounded-md  w-full outline-blue px-2 py-1 text-grey'
     const labelStyle = 'font-bold py-1 text-grey flex '
-    const [status, setStatus] = useState('')
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [tel, setTel] = useState('')
-    const [password, setPassword] = useState('0000')
-    const date = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`
-    const [account, setAccount] = useState({})
+    const [account, setAccount] = useState(student)
+
+    const [name, setName] = useState(account.firstName)
+    const [lastName, setLastName] = useState(account.lastName)
+    const [sex, setSex] = useState(account.sex)
+    const [dateOfBirth, setDateOfBirth] = useState(account.dateOfBirth)
+    const [photo, setPhoto] = useState('')
+    const [email, setEmail] = useState(account.email)
+    const [tel1, setTel1] = useState(account.tel1)
+    const [tel2, setTel2] = useState(account.tel2)
+    const [quater, setQuater] = useState(account.quater)
+    const [dateBegin, setDateBegin] = useState(account.dateBegin)
+    const [dateEnd, setDateEnd] = useState(account.dateEnd)
+    const [amount, setAmount] = useState(account.amount)
+    const [advance, setAdvance] = useState(account.advance)
+    const [training, setTraining] = useState(account.training)
+    const [schoolLevel, setSchoolLevel] = useState(account.schoolLevel)
+    const rest = amount - advance
 
     useEffect(() => {
-        setAccount({ id: new Date().getMilliseconds(), status, name, email, tel, password, date })
-    }, [status, name, email, tel, password, date])
+        setAccount({ id: new Date().getMilliseconds(), name, email, tel1 })
+    }, [name, email, tel1])
 
     return (
-        <div className=" bg-white  shadow-md rounded-md w-[450px] py-1  ">
-            <div className="p-2 bg-white flex  flex-row justify-center border-light-blue border-b-2  items-center shadow-sm  ">
-                <span className="text-2xl font-bold text-[#0c0c75]">Nouveau compte</span>
+        <div className=" bg-white flex flex-col shadow-md rounded-md  pt-2 pb-5  ">
+            <div className="p-4 bg-white flex  flex-row w-full justify-center border-light-blue border-b-2  items-center shadow-sm  ">
+                <span className="text-2xl font-bold text-[#0c0c75]">Modifier les informations</span>
             </div>
-            <div className=" flex flex-col gap-[10px] px-5 py-3">
-                <div className="flex flex-col ">
-                    <label htmlFor="" className={labelStyle}>
-                        Statut <span className="text-blue">*</span>
-                    </label>
-                    <select
-                        name=""
-                        id=""
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value)}
-                        className={inputStyle}
-                    >
-                        <option value="" disabled selected></option>
-                        <option value="admin">Admin</option>
-                        <option value="Comptable">Comptable</option>
-                        <option value="super-admin">Super Admin</option>
-                    </select>
-                </div>
-                <div className="flex flex-col ">
-                    <label htmlFor="" className={labelStyle}>
-                        Nom <span className="text-blue">*</span>
-                    </label>
-                    <input type="text" className={inputStyle} value={name} onChange={(e) => setName(e.target.value)} />
-                </div>
-                <div className="flex flex-col ">
-                    <label htmlFor="" className={labelStyle}>
-                        E-mail <span className="text-blue">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        className={inputStyle}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="flex flex-col ">
-                    <label htmlFor="" className={labelStyle}>
-                        Tel <span className="text-blue">*</span>
-                    </label>
-                    <input type="text" className={inputStyle} value={tel} onChange={(e) => setTel(e.target.value)} />
-                </div>
-                <div className="flex flex-col ">
-                    <label htmlFor="" className={labelStyle}>
-                        Mot de passe <span className="text-blue">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        className={inputStyle}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        disabled
-                    />
-                </div>
-                <div
-                    onClick={() => addAccount(account)}
-                    className="mt-2 flex justify-center py-2 rounded-md cursor-pointer text-md font-bold bg-[#0c0c75] hover:bg-[#181894] text-white"
+            <div className="flex w-full px-4 gap-4">
+                <section className="flex-1  flex-col gap-[10px]  py-3">
+                    <div className="flex flex-col ">
+                        <label htmlFor="" className={labelStyle}>
+                            Nom <span className="text-blue">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={inputStyle}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col ">
+                        <label htmlFor="" className={labelStyle}>
+                            Prénom <span className="text-blue">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={inputStyle}
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="" className={labelStyle}>
+                            Sexe <span className="text-blue">*</span>
+                        </label>
+                        <select type="text" className={inputStyle} value={sex} onChange={(e) => setSex(e.target.value)}>
+                            <option value="" defaultValue disabled></option>
+                            <option value="F">Féminin</option>
+                            <option value="M">Masculin</option>
+                        </select>
+                    </div>
+
+                    <div className="flex flex-col ">
+                        <label htmlFor="" className={labelStyle}>
+                            Date de Naissance <span className="text-blue">*</span>
+                        </label>
+                        <input
+                            type="date"
+                            className={inputStyle}
+                            value={dateOfBirth}
+                            onChange={(e) => setDateOfBirth(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="flex flex-col ">
+                        <label htmlFor="" className={labelStyle}>
+                            Photo <span className="text-blue">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={inputStyle}
+                            value={photo}
+                            onChange={(e) => setPhoto(e.target.value)}
+                        />
+                    </div>
+                </section>
+                <section className="flex-1  flex-col gap-[2px]  py-3">
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="" className={labelStyle}>
+                            Numéro de téléphone 1 <span className="text-blue">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            className={inputStyle}
+                            value={tel1}
+                            onChange={(e) => setTel1(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="" className={labelStyle}>
+                            Numéro de téléphone 2
+                        </label>
+                        <input
+                            type="number"
+                            className={inputStyle}
+                            value={tel2}
+                            onChange={(e) => setTel2(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="" className={labelStyle}>
+                            E-mail <span className="text-blue">*</span>
+                        </label>
+                        <input
+                            type="e-mail"
+                            className={inputStyle}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="" className={labelStyle}>
+                            Quartier <span className="text-blue">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={inputStyle}
+                            value={quater}
+                            onChange={(e) => setQuater(e.target.value)}
+                        />
+                    </div>
+                </section>
+                <section className="flex-1  flex-col gap-[10px]  py-3">
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="" className={labelStyle}>
+                            Niveau scolaire<span className="text-blue">*</span>
+                        </label>
+
+                        <select
+                            className={inputStyle}
+                            value={schoolLevel}
+                            onChange={(e) => setSchoolLevel(e.target.value)}
+                        >
+                            <option value=""></option>
+                            <option value="Master">CEP</option>
+                            <option value="BEPC">BEPC</option>
+                            <option value="Probatoire">Probatoire</option>
+                            <option value="Bac">Bac</option>
+                            <option value="Licence 1">Licence 1</option>
+                            <option value="Licence 2">Licence 2</option>
+                            <option value="Licence 3">Licence 3</option>
+                            <option value="Master">Master</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="" className={labelStyle}>
+                            Formation <span className="text-blue">*</span>
+                        </label>
+
+                        <select className={inputStyle} value={training} onChange={(e) => setTraining(e.target.value)}>
+                            <option value=""></option>
+                            <option value="Développement web">Développement web</option>
+                            <option value="Design Graphique">Design Graphique</option>
+                            <option value="Marketing Digital">Marketing Digital</option>
+                            <option value="Sécrétariat Bureautique">Sécrétariat Bureautique</option>
+                            <option value="Développement Mobile">Développement Mobile</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-row gap-4">
+                        <div className="flex flex-col flex-1">
+                            <label htmlFor="" className={labelStyle}>
+                                Date début <span className="text-blue">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                className={inputStyle}
+                                value={dateBegin}
+                                onChange={(e) => setDateBegin(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex flex-col flex-1">
+                            <label htmlFor="" className={labelStyle}>
+                                Date fin <span className="text-blue">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                className={inputStyle}
+                                value={dateEnd}
+                                onChange={(e) => setDateEnd(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="" className={labelStyle}>
+                            Montant à payer <span className="text-blue">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className={inputStyle}
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-row gap-4">
+                        <div className="flex flex-col flex-1">
+                            <label htmlFor="" className={labelStyle}>
+                                Avance <span className="text-blue">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                className={inputStyle}
+                                value={advance}
+                                onChange={(e) => setAdvance(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex flex-col flex-1">
+                            <label htmlFor="" className={labelStyle}>
+                                Reste <span className="text-blue">*</span>
+                            </label>
+                            <input type="text" disabled className={inputStyle} value={rest} />
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div className="mt-2 flex justify-center gap-5 px-5  ">
+                <button
+                    onClick={() => handleClose()}
+                    className="flex flex-1 justify-center py-2 rounded-md cursor-pointer text-md font-bold border-2 border-[#0c0c75] hover:bg-[#b7b7e9] text-[#0c0c75]"
+                >
+                    Annuler
+                </button>{' '}
+                <button
+                    onClick={() => handleUpdate()}
+                    className="flex flex-1 justify-center py-2 rounded-md cursor-pointer text-md font-bold bg-[#0c0c75] hover:bg-[#181894] text-white"
                 >
                     Valider
-                </div>
+                </button>
             </div>
         </div>
     )
