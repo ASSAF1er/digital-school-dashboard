@@ -21,7 +21,7 @@ function ListElement({ student, handleDelete }) {
             <td className={tdStyle}>{student.training}</td>
             <td className={tdStyle}>{student.amount}XAF</td>
             <td className={tdStyle}>{student.advance}XAF</td>
-            <td className={tdStyle}>{student.schoollLevel}</td>
+            <td className={tdStyle}>{student.schoolLevel}</td>
 
             <td className={tdStyle}>{student.dateOfBirth}</td>
             <td className={tdStyle}>{student.tel1}</td>

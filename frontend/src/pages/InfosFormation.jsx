@@ -40,7 +40,7 @@ function InfosFormation({ activePage, setActivePage, inputStyle, labelStyle, new
 
                     <select className={inputStyle} value={schoolLevel} onChange={(e) => setSchoolLevel(e.target.value)}>
                         <option value=""></option>
-                        <option value="Master">CEP</option>
+                        <option value="CEP">CEP</option>
                         <option value="BEPC">BEPC</option>
                         <option value="Probatoire">Probatoire</option>
                         <option value="Bac">Bac</option>

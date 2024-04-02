@@ -2,15 +2,15 @@ import * as React from 'react'
 import Dialog from '@mui/material/Dialog'
 
 import { useEffect, useState } from 'react'
+import axios from 'axios'
+import Spinner from '../components/Loaders/Spinner'
+import classNames from 'classnames'
 
 export default function ModifEleve({ handleDelete, student }) {
     const [openBox, setOpenBox] = React.useState(false)
 
     const handleClickOpen = () => {
         setOpenBox(true)
-    }
-    const handleUpdate = () => {
-        setOpenBox(false)
     }
 
     const handleClose = () => {
@@ -30,18 +30,18 @@ export default function ModifEleve({ handleDelete, student }) {
                 aria-describedby="alert-dialog-description"
                 maxWidth="xl"
             >
-                <Formulaire student={student} handleUpdate={handleUpdate} handleClose={handleClose} />
+                <Formulaire student={student} openBox={openBox} setOpenBox={setOpenBox} handleClose={handleClose} />
             </Dialog>
         </div>
     )
 }
 
-function Formulaire({ handleUpdate, student, handleClose }) {
+function Formulaire({ student, openBox = { openBox }, setOpenBox = { setOpenBox }, handleClose }) {
     const inputStyle = 'h-8 bg-light-blue rounded-md  w-full outline-blue px-2 py-1 text-grey'
     const labelStyle = 'font-bold py-1 text-grey flex '
     const [account, setAccount] = useState(student)
 
-    const [name, setName] = useState(account.firstName)
+    const [firstName, setFirstName] = useState(account.firstName)
     const [lastName, setLastName] = useState(account.lastName)
     const [sex, setSex] = useState(account.sex)
     const [dateOfBirth, setDateOfBirth] = useState(account.dateOfBirth)
@@ -59,9 +59,52 @@ function Formulaire({ handleUpdate, student, handleClose }) {
     const rest = amount - advance
 
     useEffect(() => {
-        setAccount({ id: new Date().getMilliseconds(), name, email, tel1 })
-    }, [name, email, tel1])
+        setAccount({
+            firstName,
+            lastName,
+            sex,
+            dateOfBirth,
+            email,
+            tel1,
+            tel2,
+            quater,
+            dateEnd,
+            dateBegin,
+            amount,
+            advance,
+            training,
+            schoolLevel
+        })
+    }, [
+        firstName,
+        lastName,
+        sex,
+        dateOfBirth,
+        email,
+        tel1,
+        tel2,
+        quater,
+        dateEnd,
+        dateBegin,
+        amount,
+        advance,
+        training,
+        schoolLevel
+    ])
 
+    const [isUpdating, setIsUpdating] = useState(false)
+
+    const handleUpdate = () => {
+        setIsUpdating(true)
+        axios
+            .put(`http://localhost:8000/api/students/${student._id}`, account)
+            .then((res) => {
+                console.log(res)
+                setIsUpdating(false)
+                setOpenBox(false)
+            })
+            .catch((err) => console.log(err))
+    }
     return (
         <div className=" bg-white flex flex-col shadow-md rounded-md  pt-2 pb-5  ">
             <div className="p-4 bg-white flex  flex-row w-full justify-center border-light-blue border-b-2  items-center shadow-sm  ">
@@ -76,8 +119,8 @@ function Formulaire({ handleUpdate, student, handleClose }) {
                         <input
                             type="text"
                             className={inputStyle}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
                         />
                     </div>
                     <div className="flex flex-col ">
@@ -185,7 +228,7 @@ function Formulaire({ handleUpdate, student, handleClose }) {
                             onChange={(e) => setSchoolLevel(e.target.value)}
                         >
                             <option value=""></option>
-                            <option value="Master">CEP</option>
+                            <option value="CEP">CEP</option>
                             <option value="BEPC">BEPC</option>
                             <option value="Probatoire">Probatoire</option>
                             <option value="Bac">Bac</option>
@@ -275,9 +318,12 @@ function Formulaire({ handleUpdate, student, handleClose }) {
                 </button>{' '}
                 <button
                     onClick={() => handleUpdate()}
-                    className="flex flex-1 justify-center py-2 rounded-md cursor-pointer text-md font-bold bg-[#0c0c75] hover:bg-[#181894] text-white"
+                    className={classNames(
+                        isUpdating && 'opacity-[0.8] ',
+                        'flex flex-1 justify-center py-2 rounded-md cursor-pointer text-md font-bold bg-[#0c0c75] hover:bg-[#181894] text-white'
+                    )}
                 >
-                    Valider
+                    {isUpdating ? <Spinner /> : 'Valider'}
                 </button>
             </div>
         </div>

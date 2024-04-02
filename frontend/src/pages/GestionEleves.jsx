@@ -1,5 +1,5 @@
 //import { studentList } from '../data/studentList'
-import Loader from '../utils/Loader'
+
 import StudentLoader from '../components/Loaders/StudentLoader'
 
 import ListElement from '../components/ListElement'
