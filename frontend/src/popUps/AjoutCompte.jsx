@@ -50,16 +50,16 @@ function Formulaire({ addAccount }) {
     const inputStyle = 'h-8 bg-light-blue rounded-md  w-full outline-blue px-2 py-1 text-grey appearance-none'
     const labelStyle = 'font-bold py-1 text-grey'
     const [status, setStatus] = useState('')
-    const [name, setName] = useState('')
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [tel, setTel] = useState('')
     const [password, setPassword] = useState('0000')
-    const date = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`
+    const createDate = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`
     const [account, setAccount] = useState({})
 
     useEffect(() => {
-        setAccount({ id: new Date().getMilliseconds(), status, name, email, tel, password, date })
-    }, [status, name, email, tel, password, date])
+        setAccount({ id: new Date().getMilliseconds(), status, username, email, tel, password, createDate })
+    }, [status, username, email, tel, password, createDate])
 
     return (
         <div className=" bg-white  shadow-md rounded-md w-[450px] py-1  ">
@@ -80,15 +80,20 @@ function Formulaire({ addAccount }) {
                     >
                         <option value="" disabled selected></option>
                         <option value="admin">Admin</option>
-                        <option value="Comptable">Comptable</option>
-                        <option value="super-admin">Super Admin</option>
+                        <option value="comptable">Comptable</option>
+                        <option value="super admin">Super Admin</option>
                     </select>
                 </div>
                 <div>
                     <label htmlFor="" className={labelStyle}>
                         Nom <span className="text-blue">*</span>
                     </label>
-                    <input type="text" className={inputStyle} value={name} onChange={(e) => setName(e.target.value)} />
+                    <input
+                        type="text"
+                        className={inputStyle}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
                 </div>
                 <div>
                     <label htmlFor="" className={labelStyle}>

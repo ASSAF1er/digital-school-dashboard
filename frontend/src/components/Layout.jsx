@@ -3,18 +3,20 @@ import SideBar from './SideBar'
 import UpperBar from './UpperBar'
 import Footer from './Footer'
 import { useContext } from 'react'
-import { ConnectedUser } from '../utils/AuthContext'
+import { AuthContext } from '../utils/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 function Layout() {
-    const { connected } = useContext(ConnectedUser)
+    const { connectedUser, setConnectedUser } = useContext(AuthContext)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (!connected) {
-            navigate('/Connexion')
-        }
-    }, [connected])
+    // useEffect(() => {
+    //     if (!connectedUser) {
+    //         navigate('/Connexion')
+    //     } else {
+    //         navigate('/')
+    //     }
+    // }, [connectedUser])
 
     return (
         <div className="flex flex-row bg-slate h-screen w-screen overflow-hidden">

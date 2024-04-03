@@ -45,16 +45,16 @@ function Formulaire({ handleEdit, account }) {
     const inputStyle = 'h-8 bg-light-blue rounded-md  w-full outline-blue px-2 py-1 text-grey appearance-none'
     const labelStyle = 'font-bold py-1 text-grey'
     const [status, setStatus] = useState(account.status)
-    const [name, setName] = useState(account.name)
+    const [username, setUsername] = useState(account.username)
     const [email, setEmail] = useState(account.email)
     const [tel, setTel] = useState(account.tel)
     const [password, setPassword] = useState(account.password)
-    const date = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`
+    const createDate = `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`
     const [newInfos, setNewInfos] = useState(account)
 
     useEffect(() => {
-        setNewInfos({ ...newInfos, status, name, email, tel, password, date })
-    }, [status, name, email, tel, password, date])
+        setNewInfos({ ...newInfos, status, username, email, tel, password, createDate })
+    }, [status, username, email, tel, password, createDate])
 
     return (
         <div className=" bg-white  shadow-md rounded-md w-[450px] py-1  ">
@@ -83,7 +83,12 @@ function Formulaire({ handleEdit, account }) {
                     <label htmlFor="" className={labelStyle}>
                         Nom <span className="text-blue">*</span>
                     </label>
-                    <input type="text" className={inputStyle} value={name} onChange={(e) => setName(e.target.value)} />
+                    <input
+                        type="text"
+                        className={inputStyle}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
                 </div>
                 <div className="flex flex-col ">
                     <label htmlFor="" className={labelStyle}>

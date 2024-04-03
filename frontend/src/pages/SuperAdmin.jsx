@@ -1,17 +1,22 @@
-import { accounts } from '../data/comptes'
+import axios from 'axios'
 import classNames from 'classnames'
 import default_photo from '../assets/profile.png'
 import AjoutCompte from '../popUps/AjoutCompte'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ModifCompte from '../popUps/ModifCompte'
 import MailCompte from '../popUps/MailCompte'
 import DeleteCompte from '../popUps/Delete/DeleteCompte'
+import AccountLoder from '../components/Loaders/AccountLoder'
 
 function SuperAdmin() {
     const thStyle = 'px-3 whitespace-nowrap py-4'
-    const [accountsList, setAccountsList] = useState(accounts)
+    const [accountsList, setAccountsList] = useState()
+
     const addAccount = (account) => {
-        setAccountsList([account, ...accountsList])
+        axios
+            .post('http://localhost:8000/api/users/signup/', account)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
     }
     const handleDelete = (id) => {
         setAccountsList(accountsList.filter((acc) => acc.id !== id))
@@ -19,6 +24,15 @@ function SuperAdmin() {
     const handleEdit = (newInfos) => {
         setAccountsList(accountsList.map((acc) => (acc.id === newInfos.id ? { ...acc, ...newInfos } : acc)))
     }
+    useEffect(() => {
+        axios
+            .get('http://localhost:8000/api/users/')
+            .then((accounts) => {
+                console.log(accounts)
+                setAccountsList(accounts.data)
+            })
+            .catch((err) => console.log(err))
+    }, [])
     return (
         <div className="flex flex-col items-center">
             <div className=" mt-4 max-w-[400px] text-xl flex items-center justify-center text-[#0c0c75] font-bold text-[18px] border-[#0c0c75] border-b">
@@ -34,28 +48,35 @@ function SuperAdmin() {
                             <th className={thStyle}>Nom</th>
                             <th className={thStyle}>Tel </th>
 
-                            <th className={thStyle}>Password</th>
                             <th className={thStyle}>Statut</th>
                             <th className={thStyle}>Depuis</th>
                             <th className={thStyle}>Email</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {accountsList.map((acc) => (
-                            <TrainingElement
-                                id={acc.id}
-                                name={acc.name}
-                                photo={acc.photo}
-                                tel={acc.tel}
-                                password={acc.password}
-                                status={acc.status}
-                                date={acc.date}
-                                email={acc.email}
-                                handleDelete={handleDelete}
-                                handleEdit={handleEdit}
-                                account={acc}
-                            />
-                        ))}
+                        {accountsList ? (
+                            accountsList.map((acc) => (
+                                <Account
+                                    id={acc._id}
+                                    name={acc.username}
+                                    photo=""
+                                    tel={acc.tel}
+                                    status={acc.status}
+                                    date={acc.createDate}
+                                    email={acc.email}
+                                    handleDelete={handleDelete}
+                                    handleEdit={handleEdit}
+                                    account={acc}
+                                />
+                            ))
+                        ) : (
+                            <>
+                                <AccountLoder />
+                                <AccountLoder />
+                                <AccountLoder />
+                                <AccountLoder />
+                            </>
+                        )}
                     </tbody>
                 </table>
             </div>
@@ -68,7 +89,7 @@ function SuperAdmin() {
 
 export default SuperAdmin
 
-function TrainingElement(props) {
+function Account(props) {
     const tdStyle = 'px-2 py-1 text-[15px] whitespace-nowrap '
     return (
         <tr className="even:bg-vlight-blue hover:bg-light-blue  border-light-grey border-b-[1px]" key={props.name}>
@@ -86,7 +107,7 @@ function TrainingElement(props) {
             </td>
             <td className={tdStyle}>{props.name}</td>
             <td className={tdStyle}>{props.tel}</td>
-            <td className={tdStyle}>{props.password}</td>
+
             <td className={tdStyle}>{props.status}</td>
             <td className={tdStyle}>{props.date}</td>
             <td className={tdStyle}>{props.email}</td>

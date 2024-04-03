@@ -1,10 +1,10 @@
 import React, { useState, createContext } from 'react'
 
-export const ConnectedUser = createContext('')
+export const AuthContext = createContext('')
 
-function ConnectedUserProvider({ children }) {
-    const [connected, setConnected] = useState(false)
-    return <ConnectedUser.Provider value={{ connected, setConnected }}>{children}</ConnectedUser.Provider>
+function AuthContextProvider({ children }) {
+    const [connectedUser, setConnectedUser] = useState('')
+    return <AuthContext.Provider value={{ connectedUser, setConnectedUser }}>{children}</AuthContext.Provider>
 }
 
-export default ConnectedUserProvider
+export default AuthContextProvider
